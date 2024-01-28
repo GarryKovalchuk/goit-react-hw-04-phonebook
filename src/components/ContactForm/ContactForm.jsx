@@ -1,54 +1,48 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import './ContactForm.module.css';
 
-export class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
+export const ContactForm = ({ onSubmit }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  handleChange = event => {
+  const handleChange = event => {
     const { name, value } = event.currentTarget;
-    this.setState({ [name]: value });
+    if (name === 'name') setName(value);
+    if (name === 'number') setNumber(value);
   };
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.props.onSubmit(this.state);
-    this.setState({
-      name: '',
-      number: '',
-    });
+    onSubmit({ name, number });
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    const { name, number } = this.state;
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={this.handleChange}
-          placeholder="Name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Назва може містити лише літери, апостроф, тире та пробіли. Наприклад Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-        />
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        name="name"
+        value={name}
+        onChange={handleChange}
+        placeholder="Name"
+        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        title="Назва може містити лише літери, апостроф, тире та пробіли. Наприклад Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        required
+      />
 
-        <input
-          type="tel"
-          name="number"
-          value={number}
-          onChange={this.handleChange}
-          placeholder="number"
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Номер телефону має складатися з цифр і може містити пробіли, тире, круглі дужки та може починатися з +"
-          required
-        />
+      <input
+        type="tel"
+        name="number"
+        value={number}
+        onChange={handleChange}
+        placeholder="number"
+        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+        title="Номер телефону має складатися з цифр і може містити пробіли, тире, круглі дужки та може починатися з +"
+        required
+      />
 
-        <button type="submit">Add contact</button>
-      </form>
-    );
-  }
-}
+      <button type="submit">Add contact</button>
+    </form>
+  );
+};
